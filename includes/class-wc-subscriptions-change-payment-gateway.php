@@ -314,6 +314,10 @@ class WC_Subscriptions_Change_Payment_Gateway {
 				WC()->customer->$setter( $subscription_billing_city );
 			}
 
+			// For each new change payment request, make sure we delete the delayed update payment method meta if it exists.
+			$subscription->delete_meta_data( '_delayed_update_payment_method_all' );
+			$subscription->save_meta_data();
+
 			// Update payment method
 			$new_payment_method = wc_clean( $_POST['payment_method'] );
 			$notice = $subscription->has_payment_gateway() ? __( 'Payment method updated.', 'woocommerce-subscriptions' ) : __( 'Payment method added.', 'woocommerce-subscriptions' );
