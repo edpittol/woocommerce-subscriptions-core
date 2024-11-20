@@ -25,18 +25,11 @@ function wcs_order_contains_switch( $order ) {
 	}
 
 	if ( ! wcs_is_order( $order ) || wcs_order_contains_renewal( $order ) ) {
-
 		$is_switch_order = false;
 
 	} else {
-
-		$switched_subscriptions = wcs_get_subscriptions_for_switch_order( $order );
-
-		if ( ! empty( $switched_subscriptions ) ) {
-			$is_switch_order = true;
-		} else {
-			$is_switch_order = false;
-		}
+		$switched_subscription_ids = WCS_Related_Order_Store::instance()->get_related_subscription_ids( $order, 'switch' );
+		$is_switch_order           = ! empty( $switched_subscription_ids );
 	}
 
 	return apply_filters( 'woocommerce_subscriptions_is_switch_order', $is_switch_order, $order );

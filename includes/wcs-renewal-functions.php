@@ -51,9 +51,10 @@ function wcs_order_contains_renewal( $order ) {
 		$order = wc_get_order( $order );
 	}
 
-	$related_subscriptions = wcs_get_subscriptions_for_renewal_order( $order );
+	// Pluck the `_subscription_renewal` meta key from the order.
+	$related_subscription_ids = WCS_Related_Order_Store::instance()->get_related_subscription_ids( $order, 'renewal' );
 
-	if ( wcs_is_order( $order ) && ! empty( $related_subscriptions ) ) {
+	if ( wcs_is_order( $order ) && ! empty( $related_subscription_ids ) ) {
 		$is_renewal = true;
 	} else {
 		$is_renewal = false;
