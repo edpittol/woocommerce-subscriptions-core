@@ -1055,3 +1055,29 @@ function wcs_set_recurring_item_total( &$item ) {
 		]
 	);
 }
+
+/**
+ * Checks if an order is a Subscriptions parent/initial order.
+ *
+ * @param WC_Order|int $order The WC_Order object or ID of a WC_Order order.
+ */
+function wcs_is_parent_order( $order ) {
+	$order = ! is_object( $order ) ? wc_get_order( $order ) : $order;
+
+	if ( ! $order || ! wcs_is_order( $order ) ) {
+		return false;
+	}
+
+	// Check if the order ID is the parent of a subscription.
+	$is_parent_order = wc_get_orders(
+		[
+			'parent' => $order->get_id(),
+			'type'   => 'shop_subscription',
+			'status' => 'any',
+			'limit'  => 1,
+			'return' => 'ids',
+		]
+	);
+
+	return apply_filters( 'woocommerce_subscriptions_is_parent_order', ! empty( $is_parent_order ), $order );
+}
