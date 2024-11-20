@@ -451,7 +451,7 @@ class WC_Subscriptions_Order {
 	 */
 	public static function add_contains_subscription_column_content_orders_table( string $column_name, WC_Order $order ) {
 		if ( 'subscription_relationship' === $column_name ) {
-			self::render_contains_subscription_column_content( $order->get_id() );
+			self::render_contains_subscription_column_content( $order );
 		}
 	}
 
@@ -2441,14 +2441,20 @@ class WC_Subscriptions_Order {
 	 *
 	 * @since 6.3.0
 	 *
-	 * @param integer $order_id The ID of the order in the current row.
+	 * @param WC_Order $order The order in the current row.
 	 */
-	private static function render_contains_subscription_column_content( int $order_id ) {
-		if ( wcs_order_contains_subscription( $order_id, 'renewal' ) ) {
+	private static function render_contains_subscription_column_content( $order ) {
+		$order = ! is_object( $order ) ? wc_get_order( $order ) : $order;
+
+		if ( ! $order ) {
+			return;
+		}
+
+		if ( wcs_order_contains_renewal( $order ) ) {
 			echo '<span class="subscription_renewal_order tips" data-tip="' . esc_attr__( 'Renewal Order', 'woocommerce-subscriptions' ) . '"></span>';
-		} elseif ( wcs_order_contains_subscription( $order_id, 'resubscribe' ) ) {
+		} elseif ( wcs_order_contains_resubscribe( $order ) ) {
 			echo '<span class="subscription_resubscribe_order tips" data-tip="' . esc_attr__( 'Resubscribe Order', 'woocommerce-subscriptions' ) . '"></span>';
-		} elseif ( wcs_order_contains_subscription( $order_id, 'parent' ) ) {
+		} elseif ( wcs_is_parent_order( $order ) ) {
 			echo '<span class="subscription_parent_order tips" data-tip="' . esc_attr__( 'Parent Order', 'woocommerce-subscriptions' ) . '"></span>';
 		} else {
 			echo '<span class="normal_order">&ndash;</span>';
