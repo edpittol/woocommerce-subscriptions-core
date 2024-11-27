@@ -3,6 +3,7 @@
 = 7.8.0 - xxxx-xx-xx =
 * Fix - Use block theme-styled buttons for subscription and related-orders actions on My Account pages.
 * Fix - Subscription totals not properly updating when customers remove items via the My Account > View Subscription page on some stores with caching enabled.
+* Fix - Prevent payment gateways that complete Change Payment requests asynchronously from blocking future attempts to update payment methods for all subscriptions.
 * Update - Changed the link on the order thank-you page to take customers directly to their "My Account > Subscriptions" page.
 
 = 7.7.2 - 2024-11-26 =
@@ -15,7 +16,6 @@
 = 7.7.0 - 2024-11-13 =
 * Add - New Customer Notification feature: sends reminder emails for upcoming subscription renewals, trials ending, and subscription expirations.
 * Fix - Prevent adding products to the cart if a subscription renewal is already present.
-* Fix - Prevent payment gateways which can't process the change payment request immediately from locking the subscription from future change payments requests.
 * Update - Improved performance of wcs_get_subscription() when querying by product and customer or order.
 * Update - Improved performance when checking limited subscription product availability.
 * Update - Deprecate upgrading from versions of WooCommerce Subscriptions prior to 3.0.0 (released Jan 2020).
