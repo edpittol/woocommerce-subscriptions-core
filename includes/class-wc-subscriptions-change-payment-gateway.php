@@ -438,6 +438,9 @@ class WC_Subscriptions_Change_Payment_Gateway {
 				continue;
 			}
 
+			// Clear any stale _delayed_update_payment_method_all meta existing on the users other subscriptions if it exists.
+			$user_subscription->delete_meta_data( '_delayed_update_payment_method_all' );
+
 			self::update_payment_method( $user_subscription, $new_payment_method, $payment_meta_table );
 
 			$user_subscription->set_requires_manual_renewal( false );
